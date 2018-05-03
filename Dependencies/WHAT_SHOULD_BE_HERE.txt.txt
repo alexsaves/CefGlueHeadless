@@ -1,0 +1,145 @@
+This is where you should place all the CEF binary dependencies for your particular version of CefGlue, including icudtl.dat, libcef, etc.
+
+Here is a sample file/folder list:
+
+Mode                LastWriteTime         Length Name
+----                -------------         ------ ----
+d-----         5/3/2018   3:38 PM                locales
+d-----         5/3/2018   3:38 PM                swiftshader
+-a----         3/7/2018   5:51 PM        3873551 cef.pak
+-a----         3/7/2018   5:51 PM         655151 cef_100_percent.pak
+-a----         3/7/2018   5:51 PM         760955 cef_200_percent.pak
+-a----         3/7/2018   5:51 PM        1877906 cef_extensions.pak
+-a----         3/7/2018   5:51 PM       62431322 cef_sandbox.lib
+-a----         3/7/2018   5:51 PM         499200 chrome_elf.dll
+-a----         3/7/2018   5:51 PM        2106216 d3dcompiler_43.dll
+-a----         3/7/2018   5:51 PM        3661112 d3dcompiler_47.dll
+-a----         3/7/2018   5:51 PM        5460979 devtools_resources.pak
+-a----         3/7/2018   5:51 PM       10171248 icudtl.dat
+-a----         3/7/2018   5:51 PM       81758720 libcef.dll
+-a----         3/7/2018   5:51 PM          51450 libcef.lib
+-a----         3/7/2018   5:51 PM          78848 libEGL.dll
+-a----         3/7/2018   5:51 PM        3730944 libGLESv2.dll
+-a----         3/7/2018   5:51 PM         205638 natives_blob.bin
+-a----         3/7/2018   5:51 PM        1161312 snapshot_blob.bin
+-a----         3/7/2018   5:51 PM        1475248 v8_context_snapshot.bin
+-a----         5/3/2018   3:42 PM            179 WHAT_SHOULD_BE_HERE.txt.txt
+-a----         3/7/2018   5:51 PM         231936 widevinecdmadapter.dll
+
+/swiftshader
+
+Mode                LastWriteTime         Length Name
+----                -------------         ------ ----
+-a----         3/7/2018   5:51 PM         102912 libEGL.dll
+-a----         3/7/2018   5:51 PM        2249728 libGLESv2.dll
+
+/locales
+
+Mode                LastWriteTime         Length Name
+----                -------------         ------ ----
+-a----         3/7/2018   4:07 PM         290468 am.pak
+-a----         3/7/2018   4:07 PM         393413 am.pak.info
+-a----         3/7/2018   4:07 PM         286130 ar.pak
+-a----         3/7/2018   4:07 PM         393413 ar.pak.info
+-a----         3/7/2018   4:07 PM         332350 bg.pak
+-a----         3/7/2018   4:07 PM         393413 bg.pak.info
+-a----         3/7/2018   4:08 PM         433157 bn.pak
+-a----         3/7/2018   4:08 PM         393413 bn.pak.info
+-a----         3/7/2018   4:08 PM         206638 ca.pak
+-a----         3/7/2018   4:08 PM         393413 ca.pak.info
+-a----         3/7/2018   4:07 PM         210025 cs.pak
+-a----         3/7/2018   4:07 PM         393413 cs.pak.info
+-a----         3/7/2018   4:07 PM         188609 da.pak
+-a----         3/7/2018   4:07 PM         393413 da.pak.info
+-a----         3/7/2018   4:07 PM         205416 de.pak
+-a----         3/7/2018   4:07 PM         393413 de.pak.info
+-a----         3/7/2018   4:07 PM         365701 el.pak
+-a----         3/7/2018   4:07 PM         393413 el.pak.info
+-a----         3/7/2018   4:07 PM         169856 en-GB.pak
+-a----         3/7/2018   4:07 PM         393413 en-GB.pak.info
+-a----         3/7/2018   4:07 PM         170857 en-US.pak
+-a----         3/7/2018   4:07 PM         393413 en-US.pak.info
+-a----         3/7/2018   4:07 PM         203555 es-419.pak
+-a----         3/7/2018   4:07 PM         393413 es-419.pak.info
+-a----         3/7/2018   4:07 PM         207043 es.pak
+-a----         3/7/2018   4:07 PM         393413 es.pak.info
+-a----         3/7/2018   4:07 PM         184195 et.pak
+-a----         3/7/2018   4:07 PM         393413 et.pak.info
+-a----         3/7/2018   4:07 PM         292090 fa.pak
+-a----         3/7/2018   4:07 PM         393413 fa.pak.info
+-a----         3/7/2018   4:08 PM         190943 fi.pak
+-a----         3/7/2018   4:08 PM         393413 fi.pak.info
+-a----         3/7/2018   4:08 PM         209821 fil.pak
+-a----         3/7/2018   4:08 PM         393413 fil.pak.info
+-a----         3/7/2018   4:08 PM         221352 fr.pak
+-a----         3/7/2018   4:08 PM         393413 fr.pak.info
+-a----         3/7/2018   4:08 PM         411264 gu.pak
+-a----         3/7/2018   4:08 PM         393413 gu.pak.info
+-a----         3/7/2018   4:08 PM         244095 he.pak
+-a----         3/7/2018   4:08 PM         393413 he.pak.info
+-a----         3/7/2018   4:08 PM         418512 hi.pak
+-a----         3/7/2018   4:08 PM         393413 hi.pak.info
+-a----         3/7/2018   4:08 PM         197914 hr.pak
+-a----         3/7/2018   4:08 PM         393413 hr.pak.info
+-a----         3/7/2018   4:08 PM         217043 hu.pak
+-a----         3/7/2018   4:08 PM         393413 hu.pak.info
+-a----         3/7/2018   4:08 PM         182541 id.pak
+-a----         3/7/2018   4:08 PM         393413 id.pak.info
+-a----         3/7/2018   4:08 PM         200142 it.pak
+-a----         3/7/2018   4:08 PM         393413 it.pak.info
+-a----         3/7/2018   4:08 PM         248048 ja.pak
+-a----         3/7/2018   4:08 PM         393413 ja.pak.info
+-a----         3/7/2018   4:08 PM         475410 kn.pak
+-a----         3/7/2018   4:08 PM         393413 kn.pak.info
+-a----         3/7/2018   4:08 PM         208975 ko.pak
+-a----         3/7/2018   4:08 PM         393413 ko.pak.info
+-a----         3/7/2018   4:08 PM         213020 lt.pak
+-a----         3/7/2018   4:08 PM         393413 lt.pak.info
+-a----         3/7/2018   4:08 PM         212442 lv.pak
+-a----         3/7/2018   4:08 PM         393413 lv.pak.info
+-a----         3/7/2018   4:08 PM         516503 ml.pak
+-a----         3/7/2018   4:08 PM         393413 ml.pak.info
+-a----         3/7/2018   4:08 PM         412480 mr.pak
+-a----         3/7/2018   4:08 PM         393413 mr.pak.info
+-a----         3/7/2018   4:08 PM         189393 ms.pak
+-a----         3/7/2018   4:08 PM         393413 ms.pak.info
+-a----         3/7/2018   4:08 PM         186239 nb.pak
+-a----         3/7/2018   4:08 PM         393413 nb.pak.info
+-a----         3/7/2018   4:08 PM         195008 nl.pak
+-a----         3/7/2018   4:08 PM         393413 nl.pak.info
+-a----         3/7/2018   4:08 PM         205576 pl.pak
+-a----         3/7/2018   4:08 PM         393413 pl.pak.info
+-a----         3/7/2018   4:08 PM         200687 pt-BR.pak
+-a----         3/7/2018   4:08 PM         393413 pt-BR.pak.info
+-a----         3/7/2018   4:08 PM         202458 pt-PT.pak
+-a----         3/7/2018   4:08 PM         393413 pt-PT.pak.info
+-a----         3/7/2018   4:08 PM         208094 ro.pak
+-a----         3/7/2018   4:08 PM         393413 ro.pak.info
+-a----         3/7/2018   4:08 PM         316722 ru.pak
+-a----         3/7/2018   4:08 PM         393413 ru.pak.info
+-a----         3/7/2018   4:08 PM         214126 sk.pak
+-a----         3/7/2018   4:08 PM         393413 sk.pak.info
+-a----         3/7/2018   4:08 PM         198007 sl.pak
+-a----         3/7/2018   4:08 PM         393413 sl.pak.info
+-a----         3/7/2018   4:08 PM         310419 sr.pak
+-a----         3/7/2018   4:08 PM         393413 sr.pak.info
+-a----         3/7/2018   4:08 PM         186959 sv.pak
+-a----         3/7/2018   4:08 PM         393413 sv.pak.info
+-a----         3/7/2018   4:08 PM         191293 sw.pak
+-a----         3/7/2018   4:08 PM         393413 sw.pak.info
+-a----         3/7/2018   4:08 PM         482119 ta.pak
+-a----         3/7/2018   4:08 PM         393413 ta.pak.info
+-a----         3/7/2018   4:08 PM         457729 te.pak
+-a----         3/7/2018   4:08 PM         393413 te.pak.info
+-a----         3/7/2018   4:08 PM         392445 th.pak
+-a----         3/7/2018   4:08 PM         393413 th.pak.info
+-a----         3/7/2018   4:08 PM         201494 tr.pak
+-a----         3/7/2018   4:08 PM         393413 tr.pak.info
+-a----         3/7/2018   4:08 PM         324997 uk.pak
+-a----         3/7/2018   4:08 PM         393413 uk.pak.info
+-a----         3/7/2018   4:08 PM         230074 vi.pak
+-a----         3/7/2018   4:08 PM         393413 vi.pak.info
+-a----         3/7/2018   4:08 PM         172808 zh-CN.pak
+-a----         3/7/2018   4:08 PM         393413 zh-CN.pak.info
+-a----         3/7/2018   4:08 PM         173304 zh-TW.pak
+-a----         3/7/2018   4:08 PM         393413 zh-TW.pak.info
