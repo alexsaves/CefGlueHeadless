@@ -52,6 +52,8 @@ Mkfile.old
 dkms.conf
 
 # Specific Subdirs
+\.vs/*
+CefGlueHeadlessDemo/bin/*
 CefGlueHeadlessDemo/obj/*
 CefGlueHeadless/\.vs/*
 CefGlueHeadless/obj/*
