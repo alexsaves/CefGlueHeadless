@@ -302,3 +302,7 @@ Dependencies/v8_context_snapshot\.bin
 \.hgignore
 
 \.hgtags
+
+Xilium\.CefGlue\.shfbproj
+
+Xilium\.CefGlue\.sln
