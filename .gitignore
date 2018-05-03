@@ -294,3 +294,11 @@ Dependencies/natives_blob\.bin
 Dependencies/snapshot_blob\.bin
 
 Dependencies/v8_context_snapshot\.bin
+
+\.hg_archival\.txt
+
+\.hgeol
+
+\.hgignore
+
+\.hgtags
