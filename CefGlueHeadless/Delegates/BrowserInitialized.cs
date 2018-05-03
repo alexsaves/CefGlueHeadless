@@ -4,9 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CefGlueHeadless
+namespace CefGlueHeadless.Delegates
 {
-    public class Class1
-    {
-    }
+    public delegate void BrowserInitializedDelegate(HeadlessBrowser browser);
 }
