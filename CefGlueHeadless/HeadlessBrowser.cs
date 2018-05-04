@@ -78,6 +78,11 @@ namespace CefGlueHeadless
         public event BrowserFrameReceivedDelegate OnFrameReceived;
 
         /// <summary>
+        /// Fires when a console message is received
+        /// </summary>
+        public event BrowserConsoleMessageReceivedDelegate OnConsoleMessageReceived;
+
+        /// <summary>
         /// Internal browser initialized state
         /// </summary>
         private bool _initialized = false;
@@ -146,6 +151,10 @@ namespace CefGlueHeadless
             {
                 OnFrameReceived?.Invoke(bmImg);
             };
+
+            // Refer console messages
+            client.OnConsoleMessageReceived += (browser, message, source, line) => OnConsoleMessageReceived?.Invoke(browser, message, source, line);
+
         }
 
         /// <summary>
