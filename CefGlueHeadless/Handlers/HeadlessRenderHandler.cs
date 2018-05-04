@@ -96,7 +96,7 @@ namespace CefGlueHeadless.Handlers
                     OnFrameReceived?.Invoke(_lastFrame);
                 }
             }
-            catch ()
+            catch
             {
                 // Don't bother until we have an actual image
                 signalSizeChanged = false;
