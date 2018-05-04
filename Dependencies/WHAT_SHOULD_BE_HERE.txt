@@ -1,4 +1,4 @@
-This is where you should place all the CEF binary dependencies for your particular version of CefGlue, including icudtl.dat, libcef, etc.
+This is where you should place all the CEF binary dependencies for your particular version of Cef including icudtl.dat, libcef, etc. Find the right version of CEF for your specific version of CefGlue at http://opensource.spotify.com/cefbuilds/index.html
 
 Here is a sample file/folder list:
 
