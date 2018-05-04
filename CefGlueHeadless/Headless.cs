@@ -64,10 +64,10 @@ namespace CefGlueHeadless
             BrowserLoadingStateChangeDelegate handler = null;
             handler = (cefBrowser, loading, back, forward) => {
                 if (loading) return;
-                browser.LoadingStateChanged -= handler;
+                browser.OnLoadingStateChanged -= handler;
                 tcs.TrySetResult(true);
             };
-            browser.LoadingStateChanged += handler;
+            browser.OnLoadingStateChanged += handler;
             return tcs.Task;
         }
 

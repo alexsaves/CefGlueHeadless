@@ -3,6 +3,7 @@ using System;
 using System.Drawing;
 using System.Threading.Tasks;
 using Xilium.CefGlue;
+using System.Timers;
 
 namespace CefGlueHeadless
 {
@@ -52,6 +53,11 @@ namespace CefGlueHeadless
         private CefBrowser browser;
 
         /// <summary>
+        /// Holds the cef client
+        /// </summary>
+        private HeadlessCefClient client;
+
+        /// <summary>
         /// Holds the last image
         /// </summary>
         public Bitmap WindowBitmap;
@@ -59,12 +65,17 @@ namespace CefGlueHeadless
         /// <summary>
         /// Fires when the loading state changes
         /// </summary>
-        public event BrowserLoadingStateChangeDelegate LoadingStateChanged;
+        public event BrowserLoadingStateChangeDelegate OnLoadingStateChanged;
 
         /// <summary>
         /// Fires when the browser initializes
         /// </summary>
         public event BrowserInitializedDelegate OnInitialized;
+
+        /// <summary>
+        /// Fires when the underlying browser size has changed
+        /// </summary>
+        public event BrowserSizeChangedDelegate OnSizeChanged;
 
         /// <summary>
         /// Internal browser initialized state
@@ -95,7 +106,7 @@ namespace CefGlueHeadless
             windowInfo.SetAsChild(parentHandle, new CefRectangle(0, 0, width, height));
             windowInfo.SetAsWindowless(parentHandle, true);
 
-            HeadlessCefClient client = new HeadlessCefClient(this);
+            client = new HeadlessCefClient(this);
             CefBrowserSettings settings = new CefBrowserSettings
             {
                 BackgroundColor = new CefColor(defaultBackground.A, defaultBackground.R, defaultBackground.G, defaultBackground.B),
@@ -106,9 +117,10 @@ namespace CefGlueHeadless
 
             CefBrowserHost.CreateBrowser(windowInfo, client, settings, url);
 
+            // Handle load state changes and pass them along
             client.LoadingStateChanged += (browser, loading, back, forward) =>
             {
-                LoadingStateChanged?.Invoke(browser, loading, back, forward);
+                OnLoadingStateChanged?.Invoke(browser, loading, back, forward);
             };
         }
 
@@ -121,7 +133,14 @@ namespace CefGlueHeadless
             var tcsrc = new TaskCompletionSource<bool>();
             if (_initialized)
             {
-                tcsrc.TrySetResult(true);
+                Timer timer = new Timer();
+                timer.Elapsed += (obj, args) =>
+                {
+                    tcsrc.TrySetResult(true);
+                };
+                timer.Interval = 100;
+                timer.AutoReset = false;
+                timer.Start();
             }
             else
             {
@@ -152,6 +171,43 @@ namespace CefGlueHeadless
             }
         }
 
+        /// <summary>
+        /// Change the size of the browser
+        /// </summary>
+        /// <param name="width">New width in pixels</param>
+        /// <param name="height">New height in pixels</param>
+        /// <returns>Task</returns>
+        public Task ResizeAsync(int width, int height)
+        {
+            AssertNotInitialized();
+            var tcsrc = new TaskCompletionSource<bool>();
+            if (width == this.Width && height == this.Height)
+            {
+                Timer timer = new Timer();
+                timer.Elapsed += (obj, args) =>
+                {
+                    tcsrc.TrySetResult(true);
+                };
+                timer.Interval = 100;
+                timer.AutoReset = false;
+                timer.Start();
+            } else {
+                BrowserSizeChangedDelegate szd = null;
+                szd = (HeadlessBrowser browser, int w, int h) =>
+                {
+                    if (w == width && h == height)
+                    {
+                        client.OnSizeChanged -= szd;
+                        tcsrc.TrySetResult(true);
+                    }
+    
+                };
+                client.OnSizeChanged += szd;
+                Resize(width, height);
+            }
+            return tcsrc.Task;
+        }
+        
         /// <summary>
         /// Set the update rate for the render pass
         /// </summary>

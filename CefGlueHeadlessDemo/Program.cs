@@ -18,20 +18,22 @@ namespace CefGlueHeadlessDemo
             using (HeadlessBrowser browser = new HeadlessBrowser(500, 300, "http://www.cnn.com"))
             {
                 WaitForBrowserInitialization(browser).GetAwaiter().GetResult();
-
-                //TakeScreenshotAsync("http://www.google.com", 530, 530, args).GetAwaiter().GetResult();
-
+                Console.WriteLine();
+                Console.WriteLine("******************************************************************************");
+                Console.WriteLine("***** Initialized!!");
+                Console.WriteLine("******************************************************************************");
                 Console.WriteLine("Press any key.");
                 Console.ReadKey();
-                //TakeAnotherScreenshotAsync(1000, 530).GetAwaiter().GetResult();
+                ResizeAndScreenshot(browser, 750, 300).GetAwaiter().GetResult();
+                ResizeAndScreenshot(browser, 1000, 450).GetAwaiter().GetResult();
+                ResizeAndScreenshot(browser, 405, 600).GetAwaiter().GetResult();
                 Console.WriteLine("Press any key.");
                 Console.ReadKey();
             }
             Console.WriteLine("Destroying..");
             Headless.Destroy();
         }
-
-
+        
         /// <summary>
         /// Wait for a browser initialization
         /// </summary>
@@ -40,6 +42,18 @@ namespace CefGlueHeadlessDemo
         public static async Task<int> WaitForBrowserInitialization(HeadlessBrowser browser)
         {
             await browser.WaitForBrowserToInitialize().ConfigureAwait(false);
+            return 0;
+        }
+
+        /// <summary>
+        /// Change the browser size, wait, then screenshot
+        /// </summary>
+        /// <param name="browser">Browser instance</param>
+        /// <returns></returns>
+        public static async Task<int> ResizeAndScreenshot(HeadlessBrowser browser, int w, int h)
+        {
+            await browser.ResizeAsync(w, h).ConfigureAwait(false);
+            browser.WindowBitmap.Save("b_" + w.ToString() + "x" + h.ToString() + ".png");
             return 0;
         }
 

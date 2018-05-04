@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="Delegates\BrowserInitialized.cs" />
     <Compile Include="Delegates\BrowserLoadingStateChanged.cs" />
+    <Compile Include="Delegates\BrowserSizeChanged.cs" />
     <Compile Include="Handlers\HeadlessLifeSpanHandler.cs" />
     <Compile Include="Handlers\HeadlessLoadHandler.cs" />
     <Compile Include="Handlers\HeadlessRenderHandler.cs" />
