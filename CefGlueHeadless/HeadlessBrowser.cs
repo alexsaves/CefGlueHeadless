@@ -88,6 +88,26 @@ namespace CefGlueHeadless
         public bool Initialized { get { return _initialized; } }
 
         /// <summary>
+        /// The mouse position
+        /// </summary>
+        private Point _mousePosition = new Point(0, 0);
+
+        /// <summary>
+        /// The mouse position
+        /// </summary>
+        public Point MousePosition { get { return _mousePosition; } }
+
+        /// <summary>
+        /// Is the mouse on top of the screen?
+        /// </summary>
+        private bool _isMouseOver = false;
+
+        /// <summary>
+        /// Is the mouse over the screen?
+        /// </summary>
+        public bool IsMouseOver { get { return _isMouseOver; } }
+
+        /// <summary>
         /// Set up a new browser
         /// </summary>
         /// <param name="width">Initial width of the browser</param>
@@ -209,9 +229,9 @@ namespace CefGlueHeadless
         }
         
         /// <summary>
-        /// Set the update rate for the render pass
+        /// Set the update rate for the render pass. Recommended not higher than 10.
         /// </summary>
-        /// <param name="frameRate">Frame rate from 0-60</param>
+        /// <param name="frameRate">Frame rate from 0-60. Recommended not to be higher than 10.</param>
         public void SetFrameRate(int frameRate)
         {
             if (frameRate < 0 || frameRate > 60)
@@ -270,6 +290,62 @@ namespace CefGlueHeadless
         }
 
         /// <summary>
+        /// Put a mouse move event at the provided position in screen coordinates
+        /// </summary>
+        /// <param name="x">X</param>
+        /// <param name="y">Y</param>
+        public void SetMouseMove(int x, int y)
+        {
+            AssertNotInitialized();
+            _mousePosition.X = x;
+            _mousePosition.Y = y;
+            CefBrowserHost hst = browser.GetHost();
+            hst.SendMouseMoveEvent(new CefMouseEvent(x, y, CefEventFlags.None), false);
+        }
+
+        /// <summary>
+        /// Put a mouse move event at the provided position in screen coordinates
+        /// </summary>
+        public void SetMouseLeave()
+        {
+            AssertNotInitialized();
+            CefBrowserHost hst = browser.GetHost();
+            hst.SendMouseMoveEvent(new CefMouseEvent(_mousePosition.X, _mousePosition.Y, CefEventFlags.None), true);
+        }
+
+        /// <summary>
+        /// Bring the mouse back
+        /// </summary>
+        /// <param name="x">X</param>
+        /// <param name="y">Y</param>
+        public void SetMouseEnter(int x, int y)
+        {
+            AssertNotInitialized();
+            SetMouseMove(x, y);
+        }
+
+        /// <summary>
+        /// Put a mouse move event at the provided position in screen coordinates
+        /// </summary>
+        /// <param name="x">X</param>
+        /// <param name="y">Y</param>
+        public void SetMouseClick(int x, int y, bool leftButton = true)
+        {
+            AssertNotInitialized();
+            SetMouseMove(x, y);
+            CefBrowserHost hst = browser.GetHost();
+            hst.SendMouseClickEvent(new CefMouseEvent(x, y, CefEventFlags.None), leftButton ? CefMouseButtonType.Left : CefMouseButtonType.Right, false, 1);
+            Timer timer = new Timer();
+            timer.Elapsed += (obj, args) =>
+            {
+                hst.SendMouseClickEvent(new CefMouseEvent(x, y, CefEventFlags.None), leftButton ? CefMouseButtonType.Left : CefMouseButtonType.Right, true, 1);
+            };
+            timer.Interval = 100;
+            timer.AutoReset = false;
+            timer.Start();
+        }
+
+        /// <summary>
         /// Throw a message that the browser is not intitialzed if needed
         /// </summary>
         private void AssertNotInitialized()
@@ -292,6 +368,7 @@ namespace CefGlueHeadless
             }
         }
 
+        #region Disposal
         /// <summary>
         /// Dispose of this instance
         /// </summary>
@@ -325,5 +402,6 @@ namespace CefGlueHeadless
             // Free any unmanaged objects here.
             _disposed = true;
         }
+        #endregion
     }
 }

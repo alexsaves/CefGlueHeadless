@@ -54,7 +54,6 @@ namespace CefGlueHeadless.Handlers
         /// <param name="height">Actual underlying browser height</param>
         protected override void OnPaint(CefBrowser browser, CefPaintElementType type, CefRectangle[] dirtyRects, IntPtr buffer, int width, int height)
         {
-            Console.WriteLine("OnPaint " + width.ToString() + ", " + height.ToString());
             var rect = new Rectangle(0, 0, headlessBrowser.Width, headlessBrowser.Height);
             bool signalSizeChanged = false;
             try
@@ -64,7 +63,6 @@ namespace CefGlueHeadless.Handlers
                     headlessBrowser.WindowBitmap.Dispose();
                     headlessBrowser.WindowBitmap = new Bitmap(width, height);
                     signalSizeChanged = true;
-                    Console.WriteLine("****************************** SIZE CHANGE DETECTED");
                 }
                 BitmapData screenShot = headlessBrowser.WindowBitmap.LockBits(rect, ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
                 int totalSize = screenShot.Stride * screenShot.Height;
@@ -86,7 +84,6 @@ namespace CefGlueHeadless.Handlers
             // Signal size changes if necessary
             if (signalSizeChanged)
             {
-                Console.WriteLine("****************************** SIGNAL SIZE CHANGED");
                 actualWidth = width;
                 actualHeight = height;
                 OnSizeChanged?.Invoke(headlessBrowser, width, height);
