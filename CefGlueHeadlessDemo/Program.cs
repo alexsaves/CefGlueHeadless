@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,7 +16,7 @@ namespace CefGlueHeadlessDemo
             Console.WriteLine("Setting up..");
             Console.WriteLine("****");
             Headless.Initialize();
-            using (HeadlessBrowser browser = new HeadlessBrowser(500, 300, "http://www.cnn.com"))
+            using (HeadlessBrowser browser = new HeadlessBrowser(500, 300, "http://www.cnn.com", 10))
             {
                 WaitForBrowserInitialization(browser).GetAwaiter().GetResult();
                 Console.WriteLine();
@@ -25,13 +26,17 @@ namespace CefGlueHeadlessDemo
                 Console.WriteLine("Press any key.");
                 Console.ReadKey();
                 ResizeAndScreenshot(browser, 750, 300).GetAwaiter().GetResult();
+                Console.WriteLine("Got Screenshot");
                 ResizeAndScreenshot(browser, 1000, 450).GetAwaiter().GetResult();
+                Console.WriteLine("Got Screenshot");
                 ResizeAndScreenshot(browser, 405, 600).GetAwaiter().GetResult();
+                Console.WriteLine("Got Screenshot");
                 Console.WriteLine("Press any key.");
                 Console.ReadKey();
             }
             Console.WriteLine("Destroying..");
             Headless.Destroy();
+            Environment.Exit(0);
         }
         
         /// <summary>
@@ -53,27 +58,10 @@ namespace CefGlueHeadlessDemo
         public static async Task<int> ResizeAndScreenshot(HeadlessBrowser browser, int w, int h)
         {
             await browser.ResizeAsync(w, h).ConfigureAwait(false);
-            browser.WindowBitmap.Save("b_" + w.ToString() + "x" + h.ToString() + ".png");
+            Bitmap result = await browser.RequestFrameAsync().ConfigureAwait(false);
+            result.Save("b_" + w.ToString() + "x" + h.ToString() + ".png");
             return 0;
         }
-
-        public static async Task<int> TakeScreenshotAsync(HeadlessBrowser browser, string url, int width, int height, string[] args)
-        {
-            await Task.Delay(5000).ConfigureAwait(false);
-            browser.WindowBitmap.Save("output.png");
-            return 0;
-        }
-
-        public static async Task<int> TakeAnotherScreenshotAsync(HeadlessBrowser browser, int width, int height)
-        {
-            browser.Resize(width, height);
-            // wait for the site to be loaded
-            await Task.Delay(10000).ConfigureAwait(false);
-            Console.WriteLine("Saving 2 at " + browser.WindowBitmap.Width.ToString() + ", " + browser.WindowBitmap.Height.ToString());
-            browser.WindowBitmap.Save("output2.png");
-            // dispose everything
-
-            return 0;
-        }
+        
     }
 }

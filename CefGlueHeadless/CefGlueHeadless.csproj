@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Delegates\BrowserFrameReceived.cs" />
     <Compile Include="Delegates\BrowserInitialized.cs" />
     <Compile Include="Delegates\BrowserLoadingStateChanged.cs" />
     <Compile Include="Delegates\BrowserSizeChanged.cs" />

@@ -33,6 +33,21 @@ namespace CefGlueHeadless.Handlers
         public event BrowserSizeChangedDelegate OnSizeChanged;
 
         /// <summary>
+        /// Fires when a frame has been received
+        /// </summary>
+        public event BrowserFrameReceivedDelegate OnFrameReceived;
+
+        /// <summary>
+        /// A bitmap is wanted
+        /// </summary>
+        private bool _frameRequested = false;
+
+        /// <summary>
+        /// Holds the last frame
+        /// </summary>
+        private Bitmap _lastFrame;
+
+        /// <summary>
         /// Set up a new instance of what will be the render handler
         /// </summary>
         /// <param name="headlessBrowser"></param>
@@ -41,6 +56,7 @@ namespace CefGlueHeadless.Handlers
             this.headlessBrowser = headlessBrowser;
             this.actualWidth = headlessBrowser.Width;
             this.actualHeight = headlessBrowser.Height;
+            _lastFrame = new Bitmap(this.actualWidth, this.actualHeight);
         }
 
         /// <summary>
@@ -58,24 +74,29 @@ namespace CefGlueHeadless.Handlers
             bool signalSizeChanged = false;
             try
             {
-                if (width != headlessBrowser.WindowBitmap.Width || height != headlessBrowser.WindowBitmap.Height)
+                if (width != _lastFrame.Width || height != _lastFrame.Height)
                 {
-                    headlessBrowser.WindowBitmap.Dispose();
-                    headlessBrowser.WindowBitmap = new Bitmap(width, height);
+                    _lastFrame.Dispose();
+                    _lastFrame = new Bitmap(width, height);
                     signalSizeChanged = true;
                 }
-                BitmapData screenShot = headlessBrowser.WindowBitmap.LockBits(rect, ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
-                int totalSize = screenShot.Stride * screenShot.Height;
-                var temporaryBuffer = new byte[totalSize];
+                if (_frameRequested)
+                {
+                    BitmapData screenShot = _lastFrame.LockBits(rect, ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
+                    int totalSize = screenShot.Stride * screenShot.Height;
+                    var temporaryBuffer = new byte[totalSize];
 
-                IntPtr screenShotPtr = screenShot.Scan0;
+                    IntPtr screenShotPtr = screenShot.Scan0;
 
-                Marshal.Copy(buffer, temporaryBuffer, 0, totalSize);
-                Marshal.Copy(temporaryBuffer, 0, screenShotPtr, totalSize);
+                    Marshal.Copy(buffer, temporaryBuffer, 0, totalSize);
+                    Marshal.Copy(temporaryBuffer, 0, screenShotPtr, totalSize);
 
-                headlessBrowser.WindowBitmap.UnlockBits(screenShot);
+                    _lastFrame.UnlockBits(screenShot);
+                    _frameRequested = false;
+                    OnFrameReceived?.Invoke(_lastFrame);
+                }
             }
-            catch (Exception ex)
+            catch ()
             {
                 // Don't bother until we have an actual image
                 signalSizeChanged = false;
@@ -88,6 +109,14 @@ namespace CefGlueHeadless.Handlers
                 actualHeight = height;
                 OnSizeChanged?.Invoke(headlessBrowser, width, height);
             }
+        }
+
+        /// <summary>
+        /// Request a bitmap frame
+        /// </summary>
+        public void RequestFrame()
+        {
+            _frameRequested = true;
         }
 
         protected override bool GetScreenInfo(CefBrowser browser, CefScreenInfo screenInfo)

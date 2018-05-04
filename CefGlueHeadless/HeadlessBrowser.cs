@@ -56,12 +56,7 @@ namespace CefGlueHeadless
         /// Holds the cef client
         /// </summary>
         private HeadlessCefClient client;
-
-        /// <summary>
-        /// Holds the last image
-        /// </summary>
-        public Bitmap WindowBitmap;
-
+        
         /// <summary>
         /// Fires when the loading state changes
         /// </summary>
@@ -76,6 +71,11 @@ namespace CefGlueHeadless
         /// Fires when the underlying browser size has changed
         /// </summary>
         public event BrowserSizeChangedDelegate OnSizeChanged;
+
+        /// <summary>
+        /// Fires when a bitmap frame is received. Use RequestFrame or RequestFrameAsync to request.
+        /// </summary>
+        public event BrowserFrameReceivedDelegate OnFrameReceived;
 
         /// <summary>
         /// Internal browser initialized state
@@ -132,9 +132,7 @@ namespace CefGlueHeadless
                 BackgroundColor = new CefColor(defaultBackground.A, defaultBackground.R, defaultBackground.G, defaultBackground.B),
                 WebSecurity = CefState.Disabled
             };
-
-            WindowBitmap = new Bitmap(width, height);
-
+            
             CefBrowserHost.CreateBrowser(windowInfo, client, settings, url);
 
             // Handle load state changes and pass them along
@@ -142,6 +140,41 @@ namespace CefGlueHeadless
             {
                 OnLoadingStateChanged?.Invoke(browser, loading, back, forward);
             };
+
+            // Handle when an image comes in
+            client.OnFrameReceived += (bmImg) =>
+            {
+                OnFrameReceived?.Invoke(bmImg);
+            };
+        }
+
+        /// <summary>
+        /// Request a frame
+        /// </summary>
+        public void RequestFrame()
+        {
+            AssertNotInitialized();
+            client.RequestFrame();
+            this.Invalidate();
+        }
+
+        /// <summary>
+        /// Request a frame with async
+        /// </summary>
+        /// <returns>Task</returns>
+        public Task<Bitmap> RequestFrameAsync()
+        {
+            AssertNotInitialized();
+            var tcsrc = new TaskCompletionSource<Bitmap>();
+            BrowserFrameReceivedDelegate brd = null;
+            brd = (Bitmap bmImg) =>
+            {
+                OnFrameReceived -= brd;
+                tcsrc.TrySetResult(bmImg);
+            };
+            OnFrameReceived += brd;
+            RequestFrame();
+            return tcsrc.Task;
         }
 
         /// <summary>
@@ -322,6 +355,15 @@ namespace CefGlueHeadless
         {
             AssertNotInitialized();
             SetMouseMove(x, y);
+        }
+
+        /// <summary>
+        /// Force a re-draw
+        /// </summary>
+        private void Invalidate()
+        {
+            CefBrowserHost hst = browser.GetHost();
+            hst.Invalidate(CefPaintElementType.View);
         }
 
         /// <summary>
