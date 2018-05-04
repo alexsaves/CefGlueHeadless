@@ -436,6 +436,7 @@ namespace CefGlueHeadless
                 {
                     _initialized = false;
                     var host = this.browser.GetHost();
+                    browser.StopLoad();
                     host.CloseBrowser();
                     host.Dispose();
                 }

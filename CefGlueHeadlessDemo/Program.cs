@@ -23,16 +23,12 @@ namespace CefGlueHeadlessDemo
                 Console.WriteLine("******************************************************************************");
                 Console.WriteLine("***** Initialized!!");
                 Console.WriteLine("******************************************************************************");
-                Console.WriteLine("Press any key.");
-                Console.ReadKey();
                 ResizeAndScreenshot(browser, 750, 300).GetAwaiter().GetResult();
                 Console.WriteLine("Got Screenshot");
                 ResizeAndScreenshot(browser, 1000, 450).GetAwaiter().GetResult();
                 Console.WriteLine("Got Screenshot");
                 ResizeAndScreenshot(browser, 405, 600).GetAwaiter().GetResult();
                 Console.WriteLine("Got Screenshot");
-                Console.WriteLine("Press any key.");
-                Console.ReadKey();
             }
             Console.WriteLine("Destroying..");
             Headless.Destroy();
