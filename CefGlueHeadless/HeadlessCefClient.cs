@@ -40,6 +40,11 @@ namespace CefGlueHeadless
         public event BrowserConsoleMessageReceivedDelegate OnConsoleMessageReceived;
 
         /// <summary>
+        /// Loading ended
+        /// </summary>
+        public event BrowserLoadEndedDelegate LoadingEnded;
+
+        /// <summary>
         /// Set up a new headless CefCLient
         /// </summary>
         /// <param name="offscreenBrowser">The browser instance</param>
@@ -48,6 +53,7 @@ namespace CefGlueHeadless
             lifeSpanHandler = new HeadlessLifeSpanHandler(offscreenBrowser);
             renderHandler = new HeadlessRenderHandler(offscreenBrowser);
             loadHandler = new HeadlessLoadHandler(offscreenBrowser);
+            loadHandler.LoadingEnded += (browser, httpStatus) => LoadingEnded?.Invoke(browser, httpStatus);
             displayHandler = new HeadlessDisplayHandler(offscreenBrowser);
             displayHandler.OnConsoleMessageReceived += (browser, message, source, line) => OnConsoleMessageReceived?.Invoke(browser, message, source, line);
             renderHandler.OnFrameReceived += (bmImg) => OnFrameReceived?.Invoke(bmImg);

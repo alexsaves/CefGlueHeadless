@@ -44,7 +44,7 @@ namespace CefGlueHeadless.Handlers
         protected override bool OnConsoleMessage(CefBrowser browser, CefLogSeverity level, string message, string source, int line)
         {
             OnConsoleMessageReceived?.Invoke(offscreenBrowser, message, source, line);
-            return base.OnConsoleMessage(browser, level, message, source, line);
+            return false;
         }
     }
 }

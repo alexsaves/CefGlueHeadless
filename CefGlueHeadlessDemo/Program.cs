@@ -44,7 +44,7 @@ namespace CefGlueHeadlessDemo
         public static async Task<int> WaitForBrowserInitialization(HeadlessBrowser browser)
         {
             await browser.WaitForBrowserToInitialize().ConfigureAwait(false);
-            return 0;
+            return 0; 
         }
 
         /// <summary>
