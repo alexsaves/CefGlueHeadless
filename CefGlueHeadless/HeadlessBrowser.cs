@@ -56,7 +56,7 @@ namespace CefGlueHeadless
         /// Holds the cef client
         /// </summary>
         private HeadlessCefClient client;
-        
+
         /// <summary>
         /// Fires when the loading state changes
         /// </summary>
@@ -76,6 +76,21 @@ namespace CefGlueHeadless
         /// Fires when a bitmap frame is received. Use RequestFrame or RequestFrameAsync to request.
         /// </summary>
         public event BrowserFrameReceivedDelegate OnFrameReceived;
+
+        /// <summary>
+        /// Fires when a console message is received
+        /// </summary>
+        public event BrowserConsoleMessageReceivedDelegate OnConsoleMessageReceived;
+
+        /// <summary>
+        /// Loading ended
+        /// </summary>
+        public event BrowserLoadEndedDelegate OnLoadingEnded;
+
+        /// <summary>
+        /// There was a loading error
+        /// </summary>
+        public event BrowserLoadEndedDelegate OnLoadingError;
 
         /// <summary>
         /// Internal browser initialized state
@@ -132,7 +147,7 @@ namespace CefGlueHeadless
                 BackgroundColor = new CefColor(defaultBackground.A, defaultBackground.R, defaultBackground.G, defaultBackground.B),
                 WebSecurity = CefState.Disabled
             };
-            
+
             CefBrowserHost.CreateBrowser(windowInfo, client, settings, url);
 
             // Handle load state changes and pass them along
@@ -146,6 +161,19 @@ namespace CefGlueHeadless
             {
                 OnFrameReceived?.Invoke(bmImg);
             };
+
+            // Handle loading ended
+            client.LoadingEnded += (browser, httpStatus) =>
+            {
+                OnLoadingEnded?.Invoke(browser, httpStatus);
+                if (httpStatus > 299)
+                {
+                    OnLoadingError?.Invoke(browser, httpStatus);
+                }
+            };
+           
+            // Refer console messages
+            client.OnConsoleMessageReceived += (browser, message, source, line) => OnConsoleMessageReceived?.Invoke(browser, message, source, line);
         }
 
         /// <summary>
@@ -244,7 +272,9 @@ namespace CefGlueHeadless
                 timer.Interval = 100;
                 timer.AutoReset = false;
                 timer.Start();
-            } else {
+            }
+            else
+            {
                 BrowserSizeChangedDelegate szd = null;
                 szd = (HeadlessBrowser browser, int w, int h) =>
                 {
@@ -253,14 +283,14 @@ namespace CefGlueHeadless
                         client.OnSizeChanged -= szd;
                         tcsrc.TrySetResult(true);
                     }
-    
+
                 };
                 client.OnSizeChanged += szd;
                 Resize(width, height);
             }
             return tcsrc.Task;
         }
-        
+
         /// <summary>
         /// Set the update rate for the render pass. Recommended not higher than 10.
         /// </summary>
@@ -320,6 +350,27 @@ namespace CefGlueHeadless
         {
             AssertNotInitialized();
             Navigate(url.ToString());
+        }
+
+        /// <summary>
+        /// Navigate to a URL
+        /// </summary>
+        /// <param name="url">A fully qualified URL</param>
+        public Task NavigateAsync(Uri url)
+        {
+            AssertNotInitialized();
+            var tcsrc = new TaskCompletionSource<bool>();
+
+            BrowserLoadEndedDelegate szd = null;
+            szd = (browser, httpStatus) =>
+            {
+                client.LoadingEnded -= szd;
+                tcsrc.TrySetResult(true);
+            };
+            client.LoadingEnded += szd;
+            Navigate(url);
+
+            return tcsrc.Task;
         }
 
         /// <summary>

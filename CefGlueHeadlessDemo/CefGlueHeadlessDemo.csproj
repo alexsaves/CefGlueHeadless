@@ -13,7 +13,7 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x86</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -30,6 +30,9 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>CefGlueHeadlessDemo.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -53,6 +56,10 @@
     <ProjectReference Include="..\CefGlueHeadless\CefGlueHeadless.csproj">
       <Project>{e8bcf8fe-0189-4d00-8410-944f579d7c88}</Project>
       <Name>CefGlueHeadless</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CefGlue\CefGlue.csproj">
+      <Project>{703ff300-34b9-48d4-a5d6-e741f48d5f95}</Project>
+      <Name>CefGlue</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -72,6 +72,7 @@ namespace CefGlueHeadless.Handlers
         {
             var rect = new Rectangle(0, 0, headlessBrowser.Width, headlessBrowser.Height);
             bool signalSizeChanged = false;
+            
             try
             {
                 if (width != _lastFrame.Width || height != _lastFrame.Height)

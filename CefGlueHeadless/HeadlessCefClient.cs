@@ -17,6 +17,7 @@ namespace CefGlueHeadless
         private readonly HeadlessLifeSpanHandler lifeSpanHandler;
         private readonly HeadlessRenderHandler renderHandler;
         private readonly HeadlessLoadHandler loadHandler;
+        private readonly HeadlessDisplayHandler displayHandler;
 
         /// <summary>
         /// Fires when the loading state changes
@@ -34,6 +35,16 @@ namespace CefGlueHeadless
         public event BrowserFrameReceivedDelegate OnFrameReceived;
 
         /// <summary>
+        /// Fires when a console message is received
+        /// </summary>
+        public event BrowserConsoleMessageReceivedDelegate OnConsoleMessageReceived;
+
+        /// <summary>
+        /// Loading ended
+        /// </summary>
+        public event BrowserLoadEndedDelegate LoadingEnded;
+
+        /// <summary>
         /// Set up a new headless CefCLient
         /// </summary>
         /// <param name="offscreenBrowser">The browser instance</param>
@@ -42,6 +53,9 @@ namespace CefGlueHeadless
             lifeSpanHandler = new HeadlessLifeSpanHandler(offscreenBrowser);
             renderHandler = new HeadlessRenderHandler(offscreenBrowser);
             loadHandler = new HeadlessLoadHandler(offscreenBrowser);
+            loadHandler.LoadingEnded += (browser, httpStatus) => LoadingEnded?.Invoke(browser, httpStatus);
+            displayHandler = new HeadlessDisplayHandler(offscreenBrowser);
+            displayHandler.OnConsoleMessageReceived += (browser, message, source, line) => OnConsoleMessageReceived?.Invoke(browser, message, source, line);
             renderHandler.OnFrameReceived += (bmImg) => OnFrameReceived?.Invoke(bmImg);
             renderHandler.OnSizeChanged += (browser, width, height) => OnSizeChanged?.Invoke(browser, width, height);
             loadHandler.LoadingStateChanged += (browser, loading, back, forward) => LoadingStateChanged?.Invoke(browser, loading, back, forward);
@@ -68,6 +82,11 @@ namespace CefGlueHeadless
         protected override CefLoadHandler GetLoadHandler()
         {
             return loadHandler;
+        }
+
+        protected override CefDisplayHandler GetDisplayHandler()
+        {
+            return displayHandler;
         }
     }
 }

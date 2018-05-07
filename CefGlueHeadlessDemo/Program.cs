@@ -23,6 +23,7 @@ namespace CefGlueHeadlessDemo
                 Console.WriteLine("******************************************************************************");
                 Console.WriteLine("***** Initialized!!");
                 Console.WriteLine("******************************************************************************");
+                Console.ReadKey();
                 ResizeAndScreenshot(browser, 750, 300).GetAwaiter().GetResult();
                 Console.WriteLine("Got Screenshot");
                 ResizeAndScreenshot(browser, 1000, 450).GetAwaiter().GetResult();
@@ -43,7 +44,7 @@ namespace CefGlueHeadlessDemo
         public static async Task<int> WaitForBrowserInitialization(HeadlessBrowser browser)
         {
             await browser.WaitForBrowserToInitialize().ConfigureAwait(false);
-            return 0;
+            return 0; 
         }
 
         /// <summary>
